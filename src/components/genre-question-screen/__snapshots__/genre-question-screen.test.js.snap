@@ -110,7 +110,6 @@ exports[`Genre Question Screen renders correctly 1`] = `
             id="answer-0"
             name="answer"
             type="checkbox"
-            value="answer-0"
           />
           <label
             className="game__check"
@@ -140,7 +139,6 @@ exports[`Genre Question Screen renders correctly 1`] = `
             id="answer-1"
             name="answer"
             type="checkbox"
-            value="answer-1"
           />
           <label
             className="game__check"
@@ -170,7 +168,6 @@ exports[`Genre Question Screen renders correctly 1`] = `
             id="answer-2"
             name="answer"
             type="checkbox"
-            value="answer-2"
           />
           <label
             className="game__check"
@@ -200,7 +197,6 @@ exports[`Genre Question Screen renders correctly 1`] = `
             id="answer-3"
             name="answer"
             type="checkbox"
-            value="answer-3"
           />
           <label
             className="game__check"

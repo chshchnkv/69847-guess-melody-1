@@ -29,20 +29,22 @@ const data = {
   ],
 };
 
-it(`Song checked on click correctly`, () => {
-  const genreScreen = mount(<GenreQuestionScreen question={data}/>);
+it(`When user answers genre question form is not submitted`, () => {
+  const onAnswer = jest.fn();
+  const genreScreen = mount(<GenreQuestionScreen question={data} onAnswer={onAnswer}/>);
 
   const labels = genreScreen.find(`label`);
   const inputs = genreScreen.find(`input`);
   expect(inputs).toHaveLength(4);
   expect(labels).toHaveLength(4);
 
-  const firstLabel = labels.first();
-  const inputForFirstLabel = genreScreen.find(`input[id="${firstLabel.prop(`htmlFor`)}"]`);
-  console.log(inputForFirstLabel.props());
-  inputForFirstLabel.simulate(`click`, {preventDefault() {}});
-  expect(inputForFirstLabel).toHaveLength(1);
-  // expect(inputChangeHandler).toBeCalledTimes(1);
-  console.log(inputForFirstLabel.props());
-  // expect(inputForFirstLabel.props().checked).toBeTruthy();
+  const form = genreScreen.find(`form`);
+  const formSubmitPrevention = jest.fn();
+
+  form.simulate(`submit`, {
+    preventDefault: formSubmitPrevention
+  });
+
+  expect(onAnswer).toHaveBeenCalledTimes(1);
+  expect(formSubmitPrevention).toHaveBeenCalledTimes(1);
 });
