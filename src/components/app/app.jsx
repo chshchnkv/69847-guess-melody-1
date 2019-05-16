@@ -6,12 +6,27 @@ import GenreQuestionScreen from "../genre-question-screen/genre-question-screen"
 import ArtistQuestionScreen from "../artist-question-screen/artist-question-screen";
 
 class App extends React.PureComponent {
-  static _getScreen(question, props, onUserAnswer) {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      question: -1
+    };
+
+    this._handleUserAnswer = this._handleUserAnswer.bind(this);
+  }
+
+  render() {
+    const {question} = this.state;
+    return this._getScreen(question, this._handleUserAnswer);
+  }
+
+  _getScreen(question, onUserAnswer) {
     if (question === -1) {
       const {
         gameTime = 5,
         possibleErrorCount = 3
-      } = props;
+      } = this.props;
       return (<WelcomeScreen
         gameTime={gameTime}
         possibleErrorCount={possibleErrorCount}
@@ -19,7 +34,7 @@ class App extends React.PureComponent {
       />);
     }
 
-    const {questions} = props;
+    const {questions} = this.props;
     const questionData = questions[question];
 
     switch (questionData.type) {
@@ -29,26 +44,15 @@ class App extends React.PureComponent {
     return null;
   }
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      question: -1
-    };
-  }
-
-  render() {
+  _handleUserAnswer() {
     const {question} = this.state;
 
-    return App._getScreen(question, this.props, () => {
-      this.setState({
-        question: question + 1 >= this.props.questions.length
-          ? -1
-          : question + 1
-      });
+    this.setState({
+      question: question + 1 >= this.props.questions.length
+        ? -1
+        : question + 1
     });
   }
-
 }
 
 App.propTypes = {
