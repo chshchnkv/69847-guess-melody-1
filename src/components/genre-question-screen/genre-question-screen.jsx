@@ -1,67 +1,95 @@
 import React from "react";
 import {Genre} from "../../data";
 import PropTypes from "prop-types";
+import AudioPlayer from "../audio-player/audio-player";
 
-const GenreQuestionScreen = (props) => {
-  const {
-    question,
-    onAnswer,
-  } = props;
+class GenreQuestionScreen extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const {
-    genre,
-    answers
-  } = question;
+    this.state = {
+      activePlayer: -1
+    };
 
-  return (
-    <section className="game game--genre">
-      <header className="game__header">
-        <a className="game__back" href="#">
-          <span className="visually-hidden">Сыграть ещё раз</span>
-          <img className="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию"/>
-        </a>
+    this._handleAnswerButtonClick = this._handleAnswerButtonClick.bind(this);
+    this._handleSubmit = this._handleSubmit.bind(this);
+  }
 
-        <svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">
-          <circle className="timer__line" cx="390" cy="390" r="370" style={{filter: `url(#blur)`, transform: `rotate(-90deg)`, scaleY: -1, transformOrigin: `center`}}/>
-        </svg>
+  render() {
+    const {
+      question,
+    } = this.props;
 
-        <div className="timer__value" xmlns="http://www.w3.org/1999/xhtml">
-          <span className="timer__mins">05</span>
-          <span className="timer__dots">:</span>
-          <span className="timer__secs">00</span>
-        </div>
+    const {
+      genre,
+      answers
+    } = question;
 
-        <div className="game__mistakes">
-          <div className="wrong"></div>
-          <div className="wrong"></div>
-          <div className="wrong"></div>
-        </div>
-      </header>
+    const {
+      activePlayer
+    } = this.state;
 
-      <section className="game__screen">
-        <h2 className="game__title">Выберите {genre} треки</h2>
-        <form className="game__tracks" onSubmit={(event) => {
-          event.preventDefault();
-          onAnswer();
-        }}>
-          {answers.map((answer, i) => (
-            <div className="track" key={`answer-${i}`}>
-              <button className="track__button track__button--play" type="button"></button>
-              <div className="track__status">
-                <audio/>
-              </div>
-              <div className="game__answer">
-                <input className="game__input visually-hidden" type="checkbox" name="answer" id={`answer-${i}`}/>
-                <label className="game__check" htmlFor={`answer-${i}`}>Отметить</label>
-              </div>
-            </div>)
-          )}
-          <button className="game__submit button" type="submit">Ответить</button>
-        </form>
+    return (
+      <section className="game game--genre">
+        <header className="game__header">
+          <a className="game__back" href="#">
+            <span className="visually-hidden">Сыграть ещё раз</span>
+            <img className="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию"/>
+          </a>
+
+          <svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">
+            <circle className="timer__line" cx="390" cy="390" r="370" style={{filter: `url(#blur)`, transform: `rotate(-90deg)`, scaleY: -1, transformOrigin: `center`}}/>
+          </svg>
+
+          <div className="timer__value" xmlns="http://www.w3.org/1999/xhtml">
+            <span className="timer__mins">05</span>
+            <span className="timer__dots">:</span>
+            <span className="timer__secs">00</span>
+          </div>
+
+          <div className="game__mistakes">
+            <div className="wrong"></div>
+            <div className="wrong"></div>
+            <div className="wrong"></div>
+          </div>
+        </header>
+
+        <section className="game__screen">
+          <h2 className="game__title">Выберите {genre} треки</h2>
+          <form className="game__tracks" onSubmit={this._handleSubmit}>
+            {answers.map((answer, i) => (
+              <div className="track" key={`answer-${i}`}>
+                <AudioPlayer src={answer.src} id={i} isPlaying={i === activePlayer} onButtonClick={this._handleAnswerButtonClick}/>
+                <div className="game__answer">
+                  <input className="game__input visually-hidden" type="checkbox" name="answer" id={`answer-${i}`}/>
+                  <label className="game__check" htmlFor={`answer-${i}`}>Отметить</label>
+                </div>
+              </div>)
+            )}
+            <button className="game__submit button" type="submit">Ответить</button>
+          </form>
+        </section>
       </section>
-    </section>
-  );
-};
+    );
+  }
+
+  _handleSubmit(event) {
+    const {
+      onAnswer,
+    } = this.props;
+
+    event.preventDefault();
+    onAnswer();
+  }
+
+  _handleAnswerButtonClick(id) {
+    const {
+      activePlayer
+    } = this.state;
+
+    this.setState({activePlayer: activePlayer === id ? -1 : id});
+  }
+}
 
 GenreQuestionScreen.propTypes = {
   question: PropTypes.shape({
