@@ -2,6 +2,7 @@ import React from "react";
 import renderer from "react-test-renderer";
 import GenreQuestionScreen from "./genre-question-screen";
 import {Genre, QuestionType} from "../../data";
+import {createNodeMock} from "../../mocks/helpers";
 
 const data = {
   type: QuestionType.GENRE,
@@ -27,8 +28,9 @@ const data = {
 };
 
 it(`Genre Question Screen renders correctly`, () => {
+  const options = {createNodeMock};
   const answerHandler = jest.fn();
-  const tree = renderer.create(<GenreQuestionScreen onAnswer={answerHandler} question={data} />);
+  const tree = renderer.create(<GenreQuestionScreen onAnswer={answerHandler} question={data} />, options);
 
   expect(tree).toMatchSnapshot();
 });
