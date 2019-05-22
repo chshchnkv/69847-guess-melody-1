@@ -2,6 +2,7 @@ import React from "react";
 import renderer from "react-test-renderer";
 import ArtistQuestionScreen from "./artist-question-screen";
 import {QuestionType} from "../../data";
+import {createNodeMock} from "../../mocks/helpers";
 
 const data = {
   type: QuestionType.ARTIST,
@@ -26,7 +27,8 @@ const data = {
 };
 
 it(`Artist Question Screen renders correctly`, () => {
+  const options = {createNodeMock};
   const answerHandler = jest.fn();
-  const tree = renderer.create(<ArtistQuestionScreen question={data} onAnswer={answerHandler}/>);
+  const tree = renderer.create(<ArtistQuestionScreen question={data} onAnswer={answerHandler}/>, options);
   expect(tree).toMatchSnapshot();
 });
